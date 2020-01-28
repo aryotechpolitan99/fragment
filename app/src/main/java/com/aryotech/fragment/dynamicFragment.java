@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class dynamicFragment extends AppCompatActivity {
 
@@ -33,7 +34,9 @@ public class dynamicFragment extends AppCompatActivity {
         FragmentTransaction fragTrans = fragManager.beginTransaction();
 
         //tambahkan object .simpleFragment (object) ke frame Layout frame_fragment
-        fragTrans.add(R.id.frame_fragment,new simpleFragment());
+        fragTrans.add(R.id.frame_fragment, anotherFragment);
+        fragTrans.hide(anotherFragment);
+        fragTrans.add(R.id.frame_fragment,simpleFragment);
 
         //kemudian commit
         fragTrans.commit();
@@ -43,7 +46,16 @@ public class dynamicFragment extends AppCompatActivity {
             public void onClick(View v) {
                 //ketika btnGanti diclick maka akan pindah ke fragment lain
                 FragmentTransaction fragTrans = getSupportFragmentManager().beginTransaction();
-                fragTrans.replace(R.id.frame_fragment,new anotherFragment());
+                //fragTrans.replace(R.id.frame_fragment, anotherFragment());
+
+                if (anotherFragment.isAdded()){
+                    fragTrans.show(anotherFragment);
+                    fragTrans.remove(simpleFragment);
+                    Toast.makeText(getApplicationContext(),"Fragment sudah ditambahkan sebelumnya",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    fragTrans.replace(R.id.frame_fragment, anotherFragment);
+                }
                 fragTrans.addToBackStack("simple fragment");
                 fragTrans.commit();
 
